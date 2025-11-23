@@ -1,5 +1,6 @@
 # Script to read dht11 sensor data
-import Adafruit_DHT
+import adafruit_dht
+import board
 import time
 
 
@@ -14,6 +15,7 @@ def main():
         time.sleep(2.0)
 
     return
+
 
 if __name__ == "__main__":
     main()

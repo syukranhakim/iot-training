@@ -1,5 +1,6 @@
 # This script demonstrate how to control flow using
 # if-clause, for-loop and while-loop
+
 import random
 
 def main():

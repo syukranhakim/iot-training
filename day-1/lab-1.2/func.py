@@ -1,4 +1,5 @@
 # This script demonstrate how to use Python function
+
 import math
 
 def greet(name):

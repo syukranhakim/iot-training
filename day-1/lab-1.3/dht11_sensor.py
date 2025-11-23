@@ -1,9 +1,12 @@
-# Script to read dht11 sensor data
+# Script to read dht11 sensor data connected to
+# Raspberry Pi board
+
 import adafruit_dht
 import board
 import time
 
-dht = adafruit_dht.DHT11(board.D5)  # GPIO5
+# Set data pin to be GPIO5
+dht = adafruit_dht.DHT11(board.D5)
 
 def main():
     while True:
@@ -20,3 +23,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -1,4 +1,4 @@
-# This script demonstrate how to turn on LED using switch
+# This script demonstrate how to turn on/off LED using switch
 # on Raspberry Pi
 
 import RPi.GPIO as GPIO
@@ -16,7 +16,8 @@ GPIO.setup(SWITCH_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # internal pull-up
 def main():
     try:
         while True:
-            if GPIO.input(SWITCH_PIN) == GPIO.LOW:  # Switch pressed
+            # Switch pressed
+            if GPIO.input(SWITCH_PIN) == GPIO.LOW:
                 GPIO.output(LED_PIN, True)
                 print("Switch Pressed")
             else:

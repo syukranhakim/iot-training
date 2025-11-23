@@ -24,15 +24,13 @@ def main():
 
     return
 
-"""
-Microstepping (like 1/16 steps) is handled by the driver’s MS1/MS2 pins or UART.
-The TMC2209 can run at its default microstep setting (usually 1/16) internally.
-
-You just toggle STEP for each step and set DIR for rotation direction.
-
-MS1/MS2 (or UART) are only needed if you want to change microstep resolution or configure current.
-
-"""
+    """
+    Microstepping (like 1/16 steps) is handled by the driver's MS1/MS2 pins or UART.
+    The TMC2209 can run at its default microstep setting (usually 1/16) internally.
+    Toggle STEP for each step and set DIR for rotation direction.
+    MS1/MS2 (or UART) are only needed if we wish to change microstep resolution
+    or configure current.
+    """
 
 if __name__ == "__main__":
     main()

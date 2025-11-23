@@ -18,6 +18,7 @@ def main():
         while True:
             if GPIO.input(SWITCH_PIN) == GPIO.LOW:  # Switch pressed
                 GPIO.output(LED_PIN, True)
+                print("Switch Pressed")
             else:
                 GPIO.output(LED_PIN, False)
             time.sleep(0.1)

@@ -3,7 +3,7 @@ import adafruit_dht
 import board
 import time
 
-dht = adafruit_dht.DHT11(board.D4)  # GPIO4
+dht = adafruit_dht.DHT11(board.D5)  # GPIO5
 
 def main():
     while True:

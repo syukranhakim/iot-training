@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="p-6">
+
+    <h1 class="text-2xl font-bold mb-4">Temperature Log</h1>
+
+    <table class="table-auto border-collapse border border-gray-400 mb-6">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="border border-gray-400 px-4 py-2">Temp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td class="border border-gray-400 px-4 py-2">{{ row }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="w-full max-w-xl">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+        const temps = {{ data|tojson }};
+        const ctx = document.getElementById('chart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: temps.map((_, i) => i + 1),
+                datasets: [{
+                    label: 'Temperature',
+                    data: temps,
+                    borderWidth: 2
+                }]
+            }
+        });
+    </script>
+
+</body>
+</html>

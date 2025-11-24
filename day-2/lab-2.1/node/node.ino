@@ -1,86 +1,123 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
 
-#include <WiFiEspAT.h>
-#include <SoftwareSerial.h>
+/* WiFi configuration */
+const char* ssid = "buffalo";
+const char* password = "delicious";
 
-/* Set DIO Pin 2 to be Arduino RX
- * Set DIO Pin 4 to be Arduino TX
- */
-SoftwareSerial espSerial(2, 4);  
+/* Server configuration */
+String server_ip = "192.168.1.3";
 
-const char* server = "";
+void setup() {
+  Serial.begin(9600); 
 
-WiFiClient wifiClient;
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting");
 
-/* Function to create HTTP POST request to server */
-void send_http_post(int device, float value) {
+  /* Wait until connected */
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
 
-  String postData = "device=" + String(device) + "&value=" + String(value, 2);
+  Serial.print("Connected to WiFi with IP Address: ");
+  Serial.println(WiFi.localIP());
+}
 
-  if (!wifiClient.connect(server, 80)) {
-    Serial.println("Failed to connect to server");
+
+/* Dummy function to read sensor value */
+double get_sensor_value() {
+  return (double) random(1000, 10000) / 100.;
+}
+
+
+/* Function to send HTTP GET request */
+void send_http_get() {
+
+  /* Check if WiFi is disconnected */
+  if(WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi disconnected");
     return;
   }
 
-  /* Raw HTTP POST request */
-  wifiClient.println("POST /demo/update.php HTTP/1.1");
-  wifiClient.println("Host: " + String(server));
-  wifiClient.println("Content-Type: application/x-www-form-urlencoded");
-  wifiClient.println("Content-Length: " + String(postData.length()));
-  wifiClient.println("Connection: close");
-  wifiClient.println();
-  wifiClient.print(postData);
-  Serial.println("Posted: " + postData);
+  Serial.println("Sending GET request");
 
-  /* Clean response */
-  while (wifiClient.available()) {
-    Serial.print(wifiClient.read());
+  /* Create http object */
+  HTTPClient http;
+  String endpoint = "http://" + server_ip + "/sensor.php";
+
+  /* Initialize http */
+  http.begin(endpoint.c_str());
+
+  /* Send HTTP GET request */
+  int response_code = http.GET();
+
+  /* Handle response */
+  if (response_code > 0) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(response_code);
+    String response_body = http.getString();
+    Serial.println(response_body);
   }
+  else {
+    Serial.print("Error code: ");
+    Serial.println(response_code);
+  }
+
+  /* Free http object */
+  http.end();
+  Serial.println();
 }
 
 
-void setup() {
-    
-  Serial.begin(9600);
-  Serial.println("Booting...");
+/* Function to send HTTP POST request */
+void send_http_post() {
 
-  /* Wait for ESP module to be ready */
-  delay(5000);
-
-  /* Init serial connection to ESP01s*/
-  espSerial.begin(9600);
-  Serial.println("Initiating WiFi Connection");
-
-  /* Connect to WiFi */
-  WiFi.init(espSerial);
-  //WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-      Serial.print(".");
-      delay(500);
+  /* Check if WiFi is disconnected */
+  if(WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi disconnected");
+    return;
   }
 
-  Serial.println("WiFi Connected!");
+  Serial.println("Sending POST request");
 
-  /* Check device IP address */
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
+  /* Get sensor value */
+  double sensor_value = get_sensor_value();
 
-  /* Ping server to check connection */
-  Serial.println("Pinging server...");
-  int result = WiFi.ping(server);
-  Serial.println("Result: " + String(result));
+  HTTPClient http;
+  String endpoint = "http://" + server_ip + "/sensor.php";
+
+  /* Initialize http */
+  http.begin(endpoint.c_str());
+
+  /* Set header to be JSON */
+  http.addHeader("Content-Type", "application/json");
+
+  /* Format payload in JSON */
+  String payload = "{\"value\":\"" + String(sensor_value, 2) + "\"}";
+  int response_code = http.POST(payload);
+
+  /* Handle response */
+  if (response_code > 0) {
+    Serial.print("HTTP Response code: ");
+    Serial.println(response_code);
+    String response_body = http.getString();
+    Serial.println(response_body);
+  }
+  else {
+    Serial.print("Error code: ");
+    Serial.println(response_code);
+  }
+
+  /* Free http object */
+  http.end();
+  Serial.println();
 }
+
 
 void loop() {
-
-  /* Define what value to send */
-  float value = random(0, 10000) / 100.0;
-  int device = 7;  // Change this to your group number
-
-  /* Send data to server */
-  send_http_post(device, value);
-
-  /* Wait 5 seconds before next request */
+  send_http_get();
+  delay(5000);
+  send_http_post();
   delay(5000);
 }

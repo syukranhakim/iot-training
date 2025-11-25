@@ -1,3 +1,6 @@
+# This code is incomplete.
+# Modify the # TODO parts to fit the question requirements.
+
 import json
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
@@ -24,10 +27,10 @@ def on_message(client, userdata, msg):
     try:
         payload = json.loads(msg.payload.decode())
         led_value = payload.get("led")
-        if led_value == 1:
+        if led_value == 2:
             # ?? # TODO: Update code
             # ?? # TODO: Update code
-        elif led_value == 2:
+        elif led_value == 1:
             # ?? # TODO: Update code
             # ?? # TODO: Update code
         else:

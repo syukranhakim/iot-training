@@ -6,7 +6,9 @@ import paho.mqtt.client as mqtt
 # ThingsBoard MQTT broker details
 THINGSBOARD_HOST = 'mqtt.thingsboard.cloud'
 MQTT_PORT = 1883
-ACCESS_TOKEN = 'KWsWnRqo7Q8fcm2b689L'
+
+# TODO: Replace with access token from device details
+ACCESS_TOKEN = ''
 
 # Default telemetry topic
 MQTT_TOPIC = 'v1/devices/me/telemetry'
@@ -56,3 +58,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

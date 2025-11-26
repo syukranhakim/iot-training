@@ -1,14 +1,15 @@
 # This code is incomplete.
-# Modify the # TODO parts to fit the question requirements.
+# Modify the TODO parts to fit the question requirements.
 
 import json
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
 # GPIO setup
-LED1 = 23
-LED2 = 24
+LED1 = ??    # TODO: Update pin definition
+LED2 = ??    # TODO: Update pin definition
 
+# Init pins as output
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED1, GPIO.OUT)
 GPIO.setup(LED2, GPIO.OUT)
@@ -26,16 +27,19 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     try:
         payload = json.loads(msg.payload.decode())
+        print("message received:", payload)
+        
         led_value = payload.get("led")
+        
         if led_value == 2:
             # ?? # TODO: Update code
             # ?? # TODO: Update code
-        elif led_value == 1:
+        elif led_value == ???:    # TODO: Update condition
             # ?? # TODO: Update code
             # ?? # TODO: Update code
         else:
-            GPIO.output(LED1, GPIO.LOW)
-            GPIO.output(LED2, GPIO.LOW)
+            # ?? # TODO: Update code
+            # ?? # TODO: Update code
     except json.JSONDecodeError:
         print("Invalid JSON:", msg.payload)
 
